@@ -11,6 +11,13 @@ library(dplyr)
 library(patchwork)
 ```
 
+```{r message=FALSE}
+dog_weights = 
+  read_excel(
+    "./data/dogweights_07sept2020.xlsx", col_names = TRUE) %>%
+  janitor::clean_names() 
+```
+
 ```{r}
 
 ```
