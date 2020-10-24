@@ -3,10 +3,26 @@ title: "p8105_mtp_cl4043"
 output: github_document
 ---
 
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(collapse = TRUE, message = FALSE)
+```
+
 ```{r message=FALSE}
 library(tidyverse)
-library(readr)
+library(readxl)
 library(janitor)
 library(dplyr)
 library(patchwork)
 ```
+
+```{r}
+dog_weight = 
+  read_excel(
+    "./data/dogweights_07sept2020.xlsx" %>%
+      janitor::make_clean_names())
+```
+
+```{r}
+dogweights_07sept2020 <- read_excel("data/dogweights_07sept2020.xlsx")
+```
+
