@@ -98,4 +98,13 @@ formatted_table %>%
             sd = round(sd(weight, na.rm = TRUE), digits = 2))
 ```
 
+ # Problem 3
+ 
+```{r}
+# Create a two-panel plot 
+p1 <- ggplot(formatted_table, aes(weight)) + geom_histogram(bins = 15) + facet_grid(~ dog)
+p2 <- ggplot(formatted_table, aes(date, weight)) + geom_point(size = 0.7) + geom_smooth(se = FALSE) + facet_grid(~ dog) + theme(axis.text.x = element_text(angle = 90, vjust = 0.5, hjust=1)) 
+p1 + p2
+```
+ 
  
