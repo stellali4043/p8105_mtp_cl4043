@@ -55,4 +55,47 @@ write.csv(dogweight_no_note, file = "dogweight_no_note.csv", row.names = F)
 write.csv(dogweight_note, file = "dogweight_note.csv", row.names = F)
 ```
 
+# Problem 2
 
+```{r}
+# How many unique dates are included in the dataset?
+summary(dogweight_df)
+
+dogweight_df %>% 
+  select(date) %>% 
+  unique() %>% 
+  drop_na() %>% 
+  count()
+```
+
+There are 204 unique dates in the dataset.
+
+```{r}
+# create a well-formatted table
+
+formatted_table <- dogweight_no_note %>% 
+  select(date,raisin,simone,gagne) %>% 
+  pivot_longer(
+     raisin:gagne,
+    names_to = "dog",
+    values_to = "lbs_oz"
+  )  %>% 
+  separate(col = "lbs_oz",
+                  into = c("lbs","oz"),
+                  sep = " ") %>% 
+   mutate(lbs = as.numeric(lbs),
+          oz = as.numeric(oz),
+          weight = lbs + oz/16) %>% #1 lbs = 16 oz
+  select(date,dog,weight) 
+
+# average weight and the standard deviation
+
+formatted_table %>% 
+  group_by(dog) %>% 
+  summarise(n = sum(!is.na(weight)), 
+            weight_na = sum(is.na(weight)),
+            mean  = round(mean(weight, na.rm = TRUE), digits = 2),
+            sd = round(sd(weight, na.rm = TRUE), digits = 2))
+```
+
+ 
