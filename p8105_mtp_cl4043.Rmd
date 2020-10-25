@@ -15,14 +15,44 @@ library(dplyr)
 library(patchwork)
 ```
 
-```{r}
-dog_weight = 
+```{r message=FALSE warning=FALSE}
+# importing data
+dogweight_df = 
   read_excel(
-    "./data/dogweights_07sept2020.xlsx" %>%
-      janitor::make_clean_names())
+    "./data/dogweights_07sept2020.xlsx", skip = 1
+    )
 ```
 
-```{r}
-dogweights_07sept2020 <- read_excel("data/dogweights_07sept2020.xlsx")
+# Problem 1
+
+```{r message=FALSE warning=FALSE}
+# tidy and cleaning
+dogweight_df <- dogweight_df  %>%
+  janitor::clean_names()
+
+# convert date into date format
+dogweight_df <- dogweight_df %>% 
+    mutate(date = as.numeric(date),
+           date = convert_to_date(date)
+         )
+
+# data entry at 2018/10/22  1810 should be 18 10
+# and at 2019/7/23  1803 should be 18 03 
+dogweight_df$raisin[which(dogweight_df$date == "2018-10-22")] <- "18 10"
+dogweight_df$raisin[which(dogweight_df$date == "2019-07-23")] <- "18 03"
+
+# also, there is a data entry at 2019/8/14  “07 15” should be “17 15” as the weight can not decrease so quickly, so this might be a mistake
+dogweight_df$raisin[which(dogweight_df$date == "2019-08-14")] <- "17 15"
+
+#omit note column for the original data
+dogweight_no_note <- dogweight_df  %>% 
+  select(date,raisin,simone,gagne,std)
+dogweight_note <- dogweight_df  %>% 
+  select(date,x6) %>% 
+  rename("note" = "x6")
+
+write.csv(dogweight_no_note, file = "dogweight_no_note.csv", row.names = F)
+write.csv(dogweight_note, file = "dogweight_note.csv", row.names = F)
 ```
+
 
